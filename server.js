@@ -2,13 +2,14 @@ import dotenv from "dotenv";
 dotenv.config();
 import { createClient } from '@supabase/supabase-js';
 import express from "express";
+import { fileURLToPath } from "url";
 
-const __dirname = `C:/Users/sehan/Documents/VsCode/a.Project/ggboard_api`;
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json()); // 바디파서 대신
 
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
@@ -17,7 +18,6 @@ app.listen(port, () => {
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
-
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
