@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Express API Requests</title>
+</head>
+
+<body>
+    <button id="createUser">사용자 생성</button>
+    <button id="login">로그인</button>
+    <button id="getPosts">게시물 목록 조회</button>
+    <button id="getSinglePost">특정 게시물 조회</button>
+    <button id="uploadPost">게시물 업로드</button>
+
+    <script>
+        const createUserBtn = document.getElementById('createUser');
+        const loginBtn = document.getElementById('login');
+        const getPostsBtn = document.getElementById('getPosts');
+        const getSinglePostBtn = document.getElementById('getSinglePost');
+        const uploadPostBtn = document.getElementById('uploadPost');
+
+        const baseURL = 'http://localhost:3000'; // 서버의 기본 URL을 입력하세요
+
+        createUserBtn.addEventListener('click', async () => {
+            const user = {
+                user_id: 'testID',
+                name: 'tester',
+                pw: '12345',
+                profile_picture_url: 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg',
+                email: 'test@test.com'
+            };
+
+            console.log(user);
+
+            const response = await fetch(`${baseURL}/user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+
+            const data = await response.json();
+            console.log(data);
+            alert(data.message);
+        });
+
+        const input_id = 'testID'; // 테스트 아이디
+        const input_pw = '12345'; // 테스트 비번
+        loginBtn.addEventListener('click', async () => {
+
+            const loginData = {
+                input_id: input_id,
+                input_pw: input_pw
+            };
+
+            console.log(loginData);
+
+            const response = await fetch(`${baseURL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        });
+
+        getPostsBtn.addEventListener('click', async () => {
+            const response = await fetch(`${baseURL}/posts`);
+            const data = await response.json();
+            console.log(data.posts);
+        });
+
+        getSinglePostBtn.addEventListener('click', async () => {
+            const postId = 1; // 조회할 게시물의 ID를 입력하세요
+            const response = await fetch(`${baseURL}/posts/${postId}`);
+            const data = await response.json();
+            console.log(data.post);
+        });
+
+        uploadPostBtn.addEventListener('click', async () => {
+            const postData = { title: '새로운 게시물', content: '내용' }; // 업로드할 게시물 데이터를 입력하세요
+            const response = await fetch(`${baseURL}/upload_post`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(postData)
+            });
+            const data = await response.json();
+            alert(data.message);
+        });
+    </script>
+</body>
+
+</html>
