@@ -25,6 +25,4 @@ export default function loginSessionCheck(req, res, next) {
             next();
         }
     });
-
-
 }

@@ -23,7 +23,6 @@ postsRoutes.post('/upload', loginSessionCheck, (req, res) => {
     }
 });
 
-
 // 메인 피드 페이지 로드
 // 함수: 로그인 성공 시, 게시글 불러오기
 // 1. 로그인 확인
