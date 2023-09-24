@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -94,4 +94,142 @@
     </script>
 </body>
 
+</html> -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>POST Request Example</title>
+</head>
+
+<body>
+    <h1>POST Request Example</h1>
+    <button id="loginButton">Login</button>
+    <button id="registerButton">Register</button>
+    <button id="updateProfileButton">Update Profile</button>
+    <button id="uploadButton">Upload Post</button>
+
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const registerButton = document.getElementById('registerButton');
+        const updateProfileButton = document.getElementById('updateProfileButton');
+        const uploadButton = document.getElementById('uploadButton');
+
+        loginButton.addEventListener('click', () => {
+            const user_id = 'tester'; 
+            const password = 'a123456!'; 
+
+            const data = {
+                user_id: user_id,
+                password: password
+            };
+
+            fetch('/UserRoutes/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    
+        registerButton.addEventListener('click', () => {
+            const user_id = 'regi01';
+            const password = 'a123456!';
+            const nickname = 'imtester';
+            const email = 'test01@gmail.com';
+
+            const data = {
+                user_id: user_id,
+                password: password,
+                nickname: nickname,
+                email: email
+            };
+
+            fetch('/UserRoutes/register', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+        
+        updateProfileButton.addEventListener('click', () => {
+            const user_id = 'tester';
+            const nickname = 'updatetest';
+            const profile_picture_url = 'https://miro.medium.com/v2/resize:fit:691/1*3wmzAGCy0z06-QMaJZD7Ag.png';
+
+            const data = {
+                user_id: user_id,
+                nickname: nickname,
+                profile_picture_url: profile_picture_url
+            };
+
+            fetch('/UserRoutes/updateProfile', {
+                method: 'POST', // POST 요청으로 변경
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    
+        uploadButton.addEventListener('click', () => { 
+            const user_id = 'tester';
+            const content = '작성글 테스트';
+            const photo = ['www.naver.com', 'www.naver.com', 'www.naver.com', 'www.naver.com'];
+
+            const data = {
+                user_id: user_id,
+                content: content,
+                photo: photo
+            };
+
+            fetch('/PostsRoutes/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+    </script>
+</body>
+
 </html>
+
+
+
+
+

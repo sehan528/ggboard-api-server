@@ -1,27 +1,61 @@
+// framework & init
+import express from "express";
+const app = express();
+import { fileURLToPath } from "url";
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 import dotenv from "dotenv";
 dotenv.config();
-import { createClient } from '@supabase/supabase-js';
-import express from "express";
-import { fileURLToPath } from "url";
+// import { createClient } from '@supabase/supabase-js';
 
-
-const app = express();
+// bodyParser
 const port = process.env.PORT || 3000;
-app.use(express.json()); // 바디파서 대신
+app.use(express.json()); // 바디파서 대신 (왜 이렇게 했더라 <- 추후 찾아보고 보완.)
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
+// Prisma
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// async function main() {
+//     // ... you will write your Prisma Client queries here
+//     const result = await prisma.$queryRaw`SELECT * FROM posts`;
+//     console.log(result)
+// }
 
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
-});
+// main()
+//     .then(async () => {
+        
+//         await prisma.$disconnect()
+//     })
+//     .catch(async (e) => {
+//         console.error(e)
+//         await prisma.$disconnect()
+//         process.exit(1)
+//     })
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Router
+import configRouter from './app/config/configHello.js';
+import postsRoutes from './app/routes/PostsRoutes.js';
+import userRoutes from './app/routes/UserRoutes.js';
+
+
+app.use('/config', configRouter);
+app.use('/PostsRoutes', postsRoutes);
+app.use('/UserRoutes', userRoutes);
+
+
+
+
+
+app.listen(port, () => { console.log(`Server is running on port ${port}`);});
+app.get('/', function (req, res) { res.sendFile(__dirname + '/index.html');});
+
+
+
+// ---------------------------------------------------------------
+// const supabaseUrl = process.env.SUPABASE_URL;
+// const supabaseKey = process.env.SUPABASE_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
 // (async () => {
 //     // 'countries' 테이블에서 데이터 가져오기
@@ -42,69 +76,69 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // -----------------
 
-app.post('/user', async (req, res) => {
-    // console.log(req.body);
-    const { user_id, name, pw, profile_picture_url, email } = req.body;
+// app.post('/user', async (req, res) => {
+//     // console.log(req.body);
+//     const { user_id, name, pw, profile_picture_url, email } = req.body;
 
-    const { data, error } = await supabase
-        .from('users')
-        .insert([
-            { user_id, name, pw, profile_picture_url, created_date: new Date(), email }
-        ]);
+//     const { data, error } = await supabase
+//         .from('users')
+//         .insert([
+//             { user_id, name, pw, profile_picture_url, created_date: new Date(), email }
+//         ]);
 
-    if (error) {
-        console.error('Error creating user:', error);
-        res.status(500).json({ message: 'User creation failed' });
-    } else {
-        res.json({ message: 'User created successfully' });
-    }
-});
+//     if (error) {
+//         console.error('Error creating user:', error);
+//         res.status(500).json({ message: 'User creation failed' });
+//     } else {
+//         res.json({ message: 'User created successfully' });
+//     }
+// });
 
-// 2. POST 요청 /login
-app.post('/login', async (req, res) => {
-    console.log(req.body);
-    const { input_id, input_pw } = req.body;
+// // 2. POST 요청 /login
+// app.post('/login', async (req, res) => {
+//     console.log(req.body);
+//     const { input_id, input_pw } = req.body;
 
-    // 'users' 테이블에서 user_id와 일치하는 레코드 조회
-    const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('user_id', input_id);
+//     // 'users' 테이블에서 user_id와 일치하는 레코드 조회
+//     const { data, error } = await supabase
+//         .from('users')
+//         .select('*')
+//         .eq('user_id', input_id);
 
-    if (error) {
-        console.error('Error fetching data:', error);
-        res.json({ message: 'Error occurred' });
-        return;
-    }
+//     if (error) {
+//         console.error('Error fetching data:', error);
+//         res.json({ message: 'Error occurred' });
+//         return;
+//     }
 
-    if (data && data.length > 0) {
-        const userRecord = data[0];
-        if (userRecord.pw === input_pw) {
-            res.json({ message: 'Login successful' });
-        } else {
-            res.json({ message: 'Incorrect password' });
-        }
-    } else {
-        res.json({ message: 'User not found' });
-    }
-});
+//     if (data && data.length > 0) {
+//         const userRecord = data[0];
+//         if (userRecord.pw === input_pw) {
+//             res.json({ message: 'Login successful' });
+//         } else {
+//             res.json({ message: 'Incorrect password' });
+//         }
+//     } else {
+//         res.json({ message: 'User not found' });
+//     }
+// });
 
-// 3. GET /posts
-app.get('/posts', async (req, res) => {
-    // 게시물 목록 조회 작업 수행
-    res.json({ posts: [] }); // 실제 데이터로 대체
-});
+// // 3. GET /posts
+// app.get('/posts', async (req, res) => {
+//     // 게시물 목록 조회 작업 수행
+//     res.json({ posts: [] }); // 실제 데이터로 대체
+// });
 
-// 4. GET /posts/:id
-app.get('/posts/:id', async (req, res) => {
-    const postId = req.params.id;
-    // 특정 게시물 조회 작업 수행
-    res.json({ post: {} }); // 실제 데이터로 대체
-});
+// // 4. GET /posts/:id
+// app.get('/posts/:id', async (req, res) => {
+//     const postId = req.params.id;
+//     // 특정 게시물 조회 작업 수행
+//     res.json({ post: {} }); // 실제 데이터로 대체
+// });
 
-// 5. POST "/upload_post"
-app.post('/upload_post', async (req, res) => {
-    const postData = req.body;
-    // 게시물 업로드 작업 수행
-    res.json({ message: 'Post uploaded successfully' });
-});
+// // 5. POST "/upload_post"
+// app.post('/upload_post', async (req, res) => {
+//     const postData = req.body;
+//     // 게시물 업로드 작업 수행
+//     res.json({ message: 'Post uploaded successfully' });
+// });
