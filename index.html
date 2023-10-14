@@ -117,7 +117,7 @@
         const uploadButton = document.getElementById('uploadButton');
 
         loginButton.addEventListener('click', () => {
-            const user_id = 'tester'; 
+            const user_id = 'regi01'; 
             const password = 'a123456!'; 
 
             const data = {
@@ -154,8 +154,8 @@
                 email: email
             };
 
-            fetch('/UserRoutes/register', {
-                method: 'PUT',
+            fetch('/UserRoutes/user', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },

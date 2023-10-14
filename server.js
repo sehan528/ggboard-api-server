@@ -1,6 +1,15 @@
 // framework & init
 import express from "express";
 const app = express();
+
+import session from 'express-session';
+app.use(session({
+    secret: 'jsc',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+}));
+
 import { fileURLToPath } from "url";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 import dotenv from "dotenv";
@@ -34,17 +43,14 @@ app.use(express.json()); // 바디파서 대신 (왜 이렇게 했더라 <- 추�
 
 
 // Router
-import configRouter from './app/config/configHello.js';
-import postsRoutes from './app/routes/PostsRoutes.js';
-import userRoutes from './app/routes/UserRoutes.js';
+// import configRouter from './app/config/configHello.js';
+import postsRoutes from './app/routes/Posts.js';
+import userRoutes from './app/routes/User.js';
 
 
-app.use('/config', configRouter);
+// app.use('/config', configRouter);
 app.use('/PostsRoutes', postsRoutes);
 app.use('/UserRoutes', userRoutes);
-
-
-
 
 
 app.listen(port, () => { console.log(`Server is running on port ${port}`);});

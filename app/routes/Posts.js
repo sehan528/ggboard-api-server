@@ -1,6 +1,6 @@
 import express from "express";
 
-import loginSessionCheck from "../controllers/loginSessionCheck.js"; 
+import loginSessionCheck from "../middleware/Session.js"; 
 import { uploadPost } from "../controllers/Database.js";
 
 const postsRoutes = express.Router();
